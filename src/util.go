@@ -20,6 +20,7 @@ func SetWD() {
 }
 
 func SetMigrationPath() {
+	//TODO: make sure working dir has a value before doing the below
 	migrationDir = fmt.Sprintf("%s/%s", workingDir, "migration")
 }
 
