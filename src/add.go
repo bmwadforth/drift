@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func AddMigration(name string) (bool, error) {
+func Add(name string) (bool, error) {
 	path := migrationDir
 
 	//TODO: Update file extension based on provider, also check config.json is set - otherwise throw error
