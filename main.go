@@ -23,19 +23,33 @@ func main() {
 			}
 		}
 		case "add": {
-			_, err := src.AddMigration(args[1]); if err != nil {
+			//TODO: Ensure args[1] exists
+			_, err := src.Add(args[1]); if err != nil {
 				log.Fatal(err)
 			}
 		}
 		case "remove": {
-
+			//TODO: Ensure args[1] exists
+			_, err := src.Remove(args[1]); if err != nil {
+				log.Fatal(err)
+			}
+		}
+		case "up": {
+			_, err := src.Up(); if err != nil {
+				log.Fatal(err)
+			}
+		}
+		case "down": {
+			_, err := src.Down(); if err != nil {
+				log.Fatal(err)
+			}
 		}
 		default:
 			log.Fatal(errors.New("invalid argument supplied"))
 		}
 	} else {
-		//TODO: Binary called with new arguments, process.exit
-		//Print CLI HELP
+		//TODO: Binary called with no arguments, process.exit
+		//TODO: Print CLI HELP
 		log.Fatal(errors.New("an argument must be supplied"))
 	}
 }
