@@ -9,6 +9,9 @@ import (
 )
 
 func main() {
+	src.SetWD()
+	src.SetMigrationPath()
+
 	args := os.Args[1:]
 
 	if len(args) > 0 {
@@ -20,7 +23,9 @@ func main() {
 			}
 		}
 		case "add": {
-
+			_, err := src.AddMigration(args[1]); if err != nil {
+				log.Fatal(err)
+			}
 		}
 		case "remove": {
 

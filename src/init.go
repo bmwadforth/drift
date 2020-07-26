@@ -1,41 +1,15 @@
 package src
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
-	"os"
 )
-
-func dirExists(path string) bool {
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		return false
-	}
-
-	return true
-}
-
-func writeConfigTemplate(path string) bool {
-	bytes, err := json.Marshal(DriftConfig{}); if err != nil {
-		log.Fatal(err)
-	}
-
-	err = ioutil.WriteFile(path, bytes, 0770); if err != nil {
-		log.Fatal(err)
-	}
-
-	return true
-}
 
 func Initialise() (bool, error) {
 	log.Println("Initialising")
+	path := workingDir
 
-	path, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	//TODO: Handle errors a little better
 	log.Println(fmt.Sprintf("%s: %s", "Current working directory", path))
 	/*dirExist := dirExists(path); if dirExist == true {
 		//Check files/folders under dir are correct and not corrupted
@@ -44,15 +18,24 @@ func Initialise() (bool, error) {
 
 	}*/
 
+	// Create migration dir
 	log.Println(fmt.Sprintf("%s: %s", "Creating migration folder under", path))
 	migrationPath := fmt.Sprintf("%s/%s", path, "migration")
+	_ = createDir(migrationPath)
 
-	mkdirErr := os.Mkdir(migrationPath, 0770)
-	if mkdirErr != nil {
-		log.Fatal(mkdirErr)
-	}
-
+	// Write config.json file
+	log.Println(fmt.Sprintf("%s: %s", "Creating config.json file under", migrationPath))
 	_ = writeConfigTemplate(fmt.Sprintf("%s/config.json", migrationPath))
+
+	// Create patches dir under migration dir
+	log.Println(fmt.Sprintf("%s: %s", "Creating patches folder under", migrationPath))
+	patchDir := fmt.Sprintf("%s/%s", migrationPath, "patch")
+	_ = createDir(patchDir)
+
+	// Create seed dir under migration dir
+	log.Println(fmt.Sprintf("%s: %s", "Creating seed folder under", migrationPath))
+	seedDir := fmt.Sprintf("%s/%s", migrationPath, "seed")
+	_ = createDir(seedDir)
 
 	return true, nil
 }

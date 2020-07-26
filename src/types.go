@@ -1,7 +1,6 @@
 package src
 
 type DriftProvider string
-
 const (
 	POSTGRES  DriftProvider = "POSTGRES"
 	SQLSERVER DriftProvider = "SQL_SERVER"
