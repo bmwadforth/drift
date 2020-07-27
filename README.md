@@ -1,6 +1,19 @@
 # WARNING!
 Do not use this library in production/enterprise systems that are designed to be stable. This library is not tested and stable yet.  
 
+# Installation
+
+## Build from source
+* Clone the repository
+* Navigate to cloned repository folder
+* go build main.go
+
+The binary will now be available in the working directory
+
+## Binaries
+
+`Not implemented yet` 
+
 # Commands
 
 ### Init
