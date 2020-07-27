@@ -9,8 +9,10 @@ import (
 )
 
 func main() {
-	src.SetWD()
+	src.SetWorkingPath()
 	src.SetMigrationPath()
+	src.SetConfig()
+	src.SetSQLPath()
 
 	args := os.Args[1:]
 

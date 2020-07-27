@@ -1,3 +1,5 @@
+vendor
 .idea
 main
 migration/
+docker-compose.yml

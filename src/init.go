@@ -23,9 +23,9 @@ func Initialise() (bool, error) {
 	migrationPath := fmt.Sprintf("%s/%s", path, "migration")
 	_ = createDir(migrationPath)
 
-	// Write config.json file
-	log.Println(fmt.Sprintf("%s: %s", "Creating config.json file under", migrationPath))
-	_ = writeConfigTemplate(fmt.Sprintf("%s/config.json", migrationPath))
+	// Write Config.json file
+	log.Println(fmt.Sprintf("%s: %s", "Creating Config.json file under", migrationPath))
+	_ = writeConfigTemplate(fmt.Sprintf("%s/Config.json", migrationPath))
 
 	// Create patches dir under migration dir
 	log.Println(fmt.Sprintf("%s: %s", "Creating patches folder under", migrationPath))

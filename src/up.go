@@ -1,11 +1,36 @@
 package src
 
 import (
-	"errors"
+	"fmt"
 	"log"
 )
 
 func Up() (bool, error) {
-	log.Fatal(errors.New("not implemented yet"))
+	path := migrationDir
+	patchDir := fmt.Sprintf("%s/%s", path, "patch")
+
+	files := readFilesInDir(patchDir)
+	fileMap := make(map[string][]byte)
+	for _, file := range files {
+		if file.Size() <= 0 {
+			log.Println(fmt.Sprintf("skipping migration: %s - no data inside migration file", file.Name()))
+			continue
+		}
+		fileMap[file.Name()] = readFileInDir(fmt.Sprintf("%s/%s", patchDir, file.Name()))
+	}
+
+	if len(fileMap) > 0 {
+		switch Config.Provider {
+		case POSTGRES:
+			RunPG(fileMap)
+		case SQLSERVER:
+			RunSQLServer(fileMap)
+		case MYSQL:
+			RunMySQL(fileMap)
+		default:
+			log.Fatal("provider not supported")
+		}
+	}
+
 	return true, nil
 }

@@ -9,7 +9,7 @@ import (
 func Add(name string) (bool, error) {
 	path := migrationDir
 
-	//TODO: Update file extension based on provider, also check config.json is set - otherwise throw error
+	//TODO: Update file extension based on provider, also check Config.json is set - otherwise throw error
 	unixTime := time.Now().Unix()
 	migrationName := fmt.Sprintf("%d_%s.sql", unixTime, name)
 
