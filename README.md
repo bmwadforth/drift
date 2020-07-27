@@ -1,3 +1,6 @@
+# WARNING!
+Do not use this library in production/enterprise systems that are designed to be stable. This library is not tested and stable yet.  
+
 # Commands
 
 ### Init
