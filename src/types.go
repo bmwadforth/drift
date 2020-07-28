@@ -1,7 +1,6 @@
 package src
 
 import (
-	"crypto"
 	"time"
 )
 
@@ -24,6 +23,6 @@ type DriftConfig struct {
 
 type DriftMigration struct {
 	Name     string
-	Checksum crypto.Hash
+	Checksum []byte
 	Applied  time.Time
 }

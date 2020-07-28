@@ -55,3 +55,43 @@ func createMigrationTable() bool {
 
 	return true
 }
+
+func getMigrations() map[string]DriftMigration {
+	db := Connect()
+
+	rows, err := db.Query("SELECT name, checksum, applied FROM drift_migrations"); if err != nil {
+		log.Fatal(err)
+	}
+
+	migrations := make(map[string]DriftMigration, 0)
+	for rows.Next() {
+		migration := DriftMigration{}
+		_ = rows.Scan(&migration.Name, &migration.Checksum, &migration.Applied)
+		migrations[migration.Name] = migration
+	}
+
+	return migrations
+}
+
+func runMigrations(migrations map[string]DriftMigration, fileMap map[string][]byte) {
+	db := Connect()
+	for fileName, fileBytes := range fileMap {
+		checkSum := fmt.Sprintf("% x", getChecksumFromBytes(fileBytes))
+		migration, foundInDB := migrations[fileName]
+
+		if foundInDB && string(migration.Checksum) != checkSum {
+			log.Println(fmt.Sprintf("ERROR: Checksum difference between database and migration folder for migration: %s", fileName))
+			continue
+		}
+
+		if foundInDB {
+			log.Println(fmt.Sprintf("skipping migration: %s - already applied", fileName))
+			continue
+		}
+
+		_, err := db.Exec("INSERT INTO drift_migrations (name, checksum) VALUES ($1, $2);", fileName, checkSum)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+}
