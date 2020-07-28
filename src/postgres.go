@@ -4,12 +4,13 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func RunPG(fileMap map[string][]byte) {
+func RunPG(migrationsToApply map[string][]byte) {
 	tableExists := migrationTableExists()
-	migrations := getMigrations()
+	appliedMigrations := getMigrations()
 	if tableExists {
-		runMigrations(migrations, fileMap)
+		runMigrations(appliedMigrations, migrationsToApply)
 	} else {
 		createMigrationTable()
+		runMigrations(appliedMigrations, migrationsToApply)
 	}
 }

@@ -73,13 +73,13 @@ func getMigrations() map[string]DriftMigration {
 	return migrations
 }
 
-func runMigrations(migrations map[string]DriftMigration, fileMap map[string][]byte) {
+func runMigrations(appliedMigrations map[string]DriftMigration, migrationsToApply map[string][]byte) {
 	db := Connect()
-	for fileName, fileBytes := range fileMap {
+	for fileName, fileBytes := range migrationsToApply {
 		checkSum := fmt.Sprintf("% x", getChecksumFromBytes(fileBytes))
-		migration, foundInDB := migrations[fileName]
+		appliedMigration, foundInDB := appliedMigrations[fileName]
 
-		if foundInDB && string(migration.Checksum) != checkSum {
+		if foundInDB && string(appliedMigration.Checksum) != checkSum {
 			log.Println(fmt.Sprintf("ERROR: Checksum difference between database and migration folder for migration: %s", fileName))
 			continue
 		}
