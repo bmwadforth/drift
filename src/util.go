@@ -1,8 +1,10 @@
 package src
 
 import (
+	"crypto/sha1"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -116,4 +118,13 @@ func getDriver() string {
 	}
 
 	return ""
+}
+
+func getChecksumFromBytes(bytes []byte) []byte {
+	h := sha1.New()
+	_, err := io.WriteString(h, string(bytes)); if err != nil {
+		log.Fatal(err)
+	}
+
+	return h.Sum(nil)
 }

@@ -17,19 +17,12 @@ func RunPG(fileMap map[string][]byte) {
 			log.Println(fmt.Sprintf("file bytes: %s", string(fileBytes)))
 			fmt.Println()
 
+			checkSum := fmt.Sprintf("% x", getChecksumFromBytes(fileBytes))
+
 			//TODO: Calculate checksum for each migration, compare 'name' of migration to checksum by comparing filemap with db table
-			rows, err := db.Query("SELECT name, checksum, applied FROM public.drift_migrations"); if err != nil {
+			_, err := db.Exec("INSERT INTO drift_migrations (name, checksum) VALUES ($1, $2);", fileName, checkSum); if err != nil {
 				log.Fatal(err)
 			}
-
-			migrations := make([]DriftMigration, 0)
-			for rows.Next() {
-				migration := DriftMigration{}
-				_ = rows.Scan(&migration.Name, &migration.Checksum, &migration.Applied)
-				migrations = append(migrations, migration)
-			}
-
-			log.Println(migrations)
 		}
 	} else {
 		createMigrationTable()
