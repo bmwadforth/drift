@@ -115,6 +115,10 @@ func getDriver() string {
 	switch Config.Provider {
 	case POSTGRES:
 		return "postgres"
+	case MYSQL:
+		return "mysql"
+	case SQLSERVER:
+		return "sqlserver"
 	}
 
 	return ""

@@ -22,11 +22,18 @@ func Up() (bool, error) {
 	if len(fileMap) > 0 {
 		switch Config.Provider {
 		case POSTGRES:
-			RunPG(fileMap)
+			fallthrough
 		case SQLSERVER:
-			RunSQLServer(fileMap)
+			fallthrough
 		case MYSQL:
-			RunMySQL(fileMap)
+			tableExists := migrationTableExists()
+			appliedMigrations := getMigrations()
+			if tableExists {
+				runMigrations(appliedMigrations, fileMap)
+			} else {
+				createMigrationTable()
+				runMigrations(appliedMigrations, fileMap)
+			}
 		default:
 			log.Fatal("provider not supported")
 		}
