@@ -24,11 +24,16 @@ func SetWorkingPath() {
 }
 
 func SetMigrationPath() {
-	//TODO: make sure working dir has a value before doing the below
+	if workingDir == "" {
+		SetWorkingPath()
+	}
 	migrationDir = fmt.Sprintf("%s/%s", workingDir, "migration")
 }
 
 func SetConfig() {
+	if workingDir == "" {
+		SetWorkingPath()
+	}
 	configBytes := readFileInDir(fmt.Sprintf("%s/%s", migrationDir, "Config.json"))
 	err := json.Unmarshal(configBytes, &Config)
 	if err != nil {
