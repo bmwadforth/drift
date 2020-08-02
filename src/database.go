@@ -92,8 +92,16 @@ func runMigrations(appliedMigrations map[string]DriftMigration, migrationsToAppl
 			continue
 		}
 
-		_, err := db.Exec("INSERT INTO drift_migrations (name, checksum) VALUES ($1, $2);", fileName, checkSum)
-		if err != nil {
+		queryToRun := string(fileBytes)
+
+		//TODO: put this in a transaction
+		_, err := db.Exec(queryToRun); if err == nil {
+			_, err := db.Exec("INSERT INTO drift_migrations (name, checksum) VALUES ($1, $2);", fileName, checkSum)
+			if err != nil {
+				log.Fatal(err)
+			}
+		} else {
+			log.Println(fmt.Sprintf("error in migration: %s", fileName))
 			log.Fatal(err)
 		}
 	}
