@@ -9,7 +9,7 @@ func Initialise() (bool, error) {
 	path := workingDir
 
 	log.Println(fmt.Sprintf("%s: %s", "Current working directory", path))
-	dirExist := dirExists(path); if dirExist == true {
+	dirExist := dirExists(migrationDir); if dirExist == true {
 		log.Fatal(fmt.Sprintf("%s: %s", "Migration folder exists under", path))
 	} else {
 		// Create migration dir
