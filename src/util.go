@@ -49,11 +49,16 @@ func SetSQLPath() {
 }
 
 func dirExists(path string) bool {
-	if _, err := os.Stat(path); os.IsNotExist(err) {
+	if _, err := os.Stat(path); err == nil {
+		return true
+	} else if os.IsNotExist(err) {
 		return false
+	} else {
+		//If we end up here, the path might or might not exist, thus we need to inspect the error (permission denied, for e.g.)
+		log.Fatal(err)
 	}
 
-	return true
+	return false
 }
 
 func readFilesInDir(path string) []os.FileInfo {
