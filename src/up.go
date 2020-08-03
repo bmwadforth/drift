@@ -27,11 +27,12 @@ func Up() (bool, error) {
 			fallthrough
 		case MYSQL:
 			tableExists := migrationTableExists()
-			appliedMigrations := getMigrations()
 			if tableExists {
+				appliedMigrations := getMigrations()
 				runMigrations(appliedMigrations, fileMap)
 			} else {
 				createMigrationTable()
+				appliedMigrations := getMigrations()
 				runMigrations(appliedMigrations, fileMap)
 			}
 		default:

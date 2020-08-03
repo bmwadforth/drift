@@ -112,13 +112,20 @@ func writeFile(path string) bool {
 }
 
 func loadExistsSQL() string {
-	fileBytes := readFileInDir(fmt.Sprintf("%s/%s", sqlDir, "exists.sql"))
-	return string(fileBytes)
+	return `SELECT EXISTS (
+   SELECT FROM information_schema.tables
+   WHERE  table_schema = 'public'
+   AND    table_name   = 'drift_migrations'
+);`
 }
 
 func loadCreateSQL() string {
-	fileBytes := readFileInDir(fmt.Sprintf("%s/%s", sqlDir, "create.sql"))
-	return string(fileBytes)
+	return `CREATE TABLE DRIFT_MIGRATIONS (
+    id serial not null primary key,
+    name varchar(128) unique not null,
+    checksum bytea unique not null,
+    applied timestamptz default now()
+);`
 }
 
 func getDriver() string {
