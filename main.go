@@ -11,10 +11,12 @@ import (
 func main() {
 	src.SetWorkingPath()
 	src.SetMigrationPath()
-	src.SetConfig()
 	src.SetSQLPath()
 
 	args := os.Args[1:]
+	if args[0] != "init" {
+		src.SetConfig()
+	}
 
 	if len(args) > 0 {
 		fmt.Println(args)
