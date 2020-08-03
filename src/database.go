@@ -100,19 +100,16 @@ func runMigrations(appliedMigrations map[string]DriftMigration, migrationsToAppl
 
 		tx, err := db.Begin()
 		if err != nil {
-			log.Println("error here")
 			log.Fatal(err)
 		}
 
 		_, execErr := tx.Exec(queryToRun)
 		if execErr != nil {
-			log.Println("error here")
 			_ = tx.Rollback()
 			log.Fatal(execErr)
 		} else {
 			_, execErr = tx.Exec("INSERT INTO drift_migrations (name, checksum) VALUES ($1, $2);", fileName, checkSum)
 			if execErr != nil {
-				log.Println("error here")
 				_ = tx.Rollback()
 				log.Fatal(err)
 			}
