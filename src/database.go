@@ -32,13 +32,15 @@ func migrationTableExists() bool {
 	db := Connect()
 
 	existsQuery := loadExistsSQL()
-	qResult, err := db.Query(existsQuery); if err != nil {
+	qResult, err := db.Query(existsQuery)
+	if err != nil {
 		log.Fatal(err)
 	}
 
 	var migrationTableExists bool
 	qResult.Next()
-	err = qResult.Scan(&migrationTableExists); if err != nil {
+	err = qResult.Scan(&migrationTableExists)
+	if err != nil {
 		log.Fatal(err)
 	}
 	if migrationTableExists {
@@ -52,7 +54,8 @@ func createMigrationTable() bool {
 	db := Connect()
 
 	createQuery := loadCreateSQL()
-	_, err := db.Exec(createQuery); if err != nil {
+	_, err := db.Exec(createQuery)
+	if err != nil {
 		log.Fatal(err)
 	}
 
@@ -62,7 +65,8 @@ func createMigrationTable() bool {
 func getMigrations() map[string]DriftMigration {
 	db := Connect()
 
-	rows, err := db.Query("SELECT name, checksum, applied FROM drift_migrations"); if err != nil {
+	rows, err := db.Query("SELECT name, checksum, applied FROM drift_migrations")
+	if err != nil {
 		log.Fatal(err)
 	}
 
@@ -94,15 +98,27 @@ func runMigrations(appliedMigrations map[string]DriftMigration, migrationsToAppl
 
 		queryToRun := string(fileBytes)
 
-		//TODO: put this in a transaction
-		_, err := db.Exec(queryToRun); if err == nil {
-			_, err := db.Exec("INSERT INTO drift_migrations (name, checksum) VALUES ($1, $2);", fileName, checkSum)
-			if err != nil {
+		tx, err := db.Begin()
+		if err != nil {
+			log.Println("error here")
+			log.Fatal(err)
+		}
+
+		_, execErr := tx.Exec(queryToRun)
+		if execErr != nil {
+			log.Println("error here")
+			_ = tx.Rollback()
+			log.Fatal(execErr)
+		} else {
+			_, execErr = tx.Exec("INSERT INTO drift_migrations (name, checksum) VALUES ($1, $2);", fileName, checkSum)
+			if execErr != nil {
+				log.Println("error here")
+				_ = tx.Rollback()
 				log.Fatal(err)
 			}
-		} else {
-			log.Println(fmt.Sprintf("error in migration: %s", fileName))
-			log.Fatal(err)
+			if err := tx.Commit(); err != nil {
+				log.Fatal(err)
+			}
 		}
 	}
 }
