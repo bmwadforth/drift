@@ -34,7 +34,7 @@ func SetConfig() {
 	if workingDir == "" {
 		SetWorkingPath()
 	}
-	configBytes := readFileInDir(fmt.Sprintf("%s/%s", migrationDir, "Config.json"))
+	configBytes := readFileInDir(fmt.Sprintf("%s/%s", migrationDir, "config.json"))
 	err := json.Unmarshal(configBytes, &Config)
 	if err != nil {
 		log.Fatal(fmt.Errorf("unable to set configuration: %v", err))
