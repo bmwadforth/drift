@@ -10,9 +10,18 @@ Do not use this library in production/enterprise systems. This library is not te
 
 The binary will now be available in the working directory
 
-## Binaries
+## Binaries **(NOT IMPLEMENTED YET)**
 
-`Not implemented yet` 
+## Supported Providers
+
+When using drift you can specify a provider - which is the type of database management system that you are using. The table below shows currently supported database management systems.
+
+| Name        | Config Name | Supported |
+| ----------- | ----------- | --------- |
+| PostgreSQL  | POSTGRES    |  ✅        |
+| MySQL       | MYSQL       |  ❌        |
+| SQL Server  | SQLSERVER   |  ❌        |
+
 
 # Commands
 
@@ -65,7 +74,7 @@ An example configuration file for POSTGRES would look like so
 
 This command adds a new migration under the patch folder. For example
 
-`drift add my_migration` will add a new file under patch with the following template <unix_timestamp>_<migration_name>.sql
+`drift add my_migration` will add two new files under patch with the following template <unix_timestamp>_<migration_name>_up.sql and <unix_timestamp>_<migration_name>_down.sql.
 
     .
     ├── migration                                             # The top level migration folder
@@ -73,18 +82,17 @@ This command adds a new migration under the patch folder. For example
             ├── 1595849780_my_migration.sql                   # The migration file
 
 
-### Remove
+### Remove **(NOT IMPLEMENTED YET)**
 
 `drift remove`
 
-This has not been implemented yet
 
 ### Up
 `drift up`
 
-Running this command will create a drift_migrations table in your database, and will apply any migrations that exist under patch.
+Running this command will create a drift_migrations table in your database, and will apply any migrations that exist under patch that have 'up' suffixed to the migration name.
 
-### Down
+### Down **(NOT IMPLEMENTED YET)**
 `drift down` or `drift down <migration_name>`
 
-This has not been implemented yet. 
+Running this command apply any migrations that exist under patch that have 'down' suffixed to the migration name.
