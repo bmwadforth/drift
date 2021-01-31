@@ -79,7 +79,8 @@ This command adds a new migration under the patch folder. For example
     .
     ├── migration                                             # The top level migration folder
         ├── patch                                             # When you run drift add <migration_name> - the migration is placed here
-            ├── 1595849780_my_migration.sql                   # The migration file
+            ├── 1595849780_my_migration_up.sql                # The migration file used to apply the migration to a database schema
+            ├── 1595849780_my_migration_down.sql              # The migration file used to remove the migration from a database schema
 
 
 ### Remove **(NOT IMPLEMENTED YET)**
