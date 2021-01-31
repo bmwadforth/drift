@@ -3,7 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/bmwadforth/drift/src"
+	"drift/src"
 	"log"
 	"os"
 )
