@@ -6,7 +6,7 @@ import (
 	_ "github.com/denisenkom/go-mssqldb"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
-	"github.com/fatih/color"
+//	"github.com/fatih/color"
 	"log"
 )
 
