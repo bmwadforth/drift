@@ -9,7 +9,7 @@ func Up() (bool, error) {
 	path := migrationDir
 	patchDir := fmt.Sprintf("%s/%s", path, "patch")
 
-	files := readFilesInDir(patchDir)
+	files := readFilesInDir(patchDir, "_up.sql")
 	fileMap := make(map[string][]byte)
 	for _, file := range files {
 		if file.Size() <= 0 {

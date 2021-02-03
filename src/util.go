@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 )
 
 var workingDir string
@@ -61,13 +62,20 @@ func dirExists(path string) bool {
 	return false
 }
 
-func readFilesInDir(path string) []os.FileInfo {
+func readFilesInDir(path string, pattern string) []os.FileInfo {
 	files, err := ioutil.ReadDir(path)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return files
+	filesToReturn := make([]os.FileInfo, 0, 0)
+	for _, file := range files {
+		if strings.Contains(file.Name(), pattern) {
+			filesToReturn = append(filesToReturn, file)
+		}
+	}
+
+	return filesToReturn
 }
 
 func readFileInDir(path string) []byte {
